@@ -94,6 +94,11 @@
             bottom: 77px;
             left: 8px;
         }
+
+        .screenshot {
+            display: inline-block;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
@@ -121,10 +126,10 @@
     </div>
     <div>
         <button class="change-background">换底</button>
-        <button class="screenshot">截圖</button>
+        <div>
+            <a href="#" class="screenshot">下載截圖</a>
+        </div>
     </div>
-
-
 
     <div class="output">
         <img class="matters-logo bright" src="./assets/matters-logo.png">
@@ -142,12 +147,6 @@
                 <div id="title"></div>
             </div>
             <img class="qrcode" src="./assets/qrcode.png">
-        </div>
-    </div>
-
-    <div class="screenshot-container" style="display: none">
-        <div style="background: white; padding: 10px">
-            請右鍵點擊圖片選擇保存。
         </div>
     </div>
 
@@ -193,8 +192,11 @@
 
     document.querySelector(".screenshot").addEventListener("click", async event => {
         html2canvas(document.querySelector(".output")).then(canvas => {
-            document.querySelector(".screenshot-container").appendChild(canvas)
-            document.querySelector(".screenshot-container").style.display = "block"
+            const image = canvas.toDataURL("image/png", 1.0).replace("image/png", "image/octet-stream");
+            const link = document.createElement('a');
+            link.download = "my-image.png";
+            link.href = image;
+            link.click();
         });
     });
 
