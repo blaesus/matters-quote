@@ -1,0 +1,205 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <style>
+        body {
+            font-family: sans-serif;
+            font-size: 16px;
+        }
+
+        .matters-logo {
+            display: block;
+            width: 150px;
+            margin: 0 auto;
+            z-index: 1;
+        }
+
+        #date {
+            float: right;
+        }
+
+        .output {
+            position: relative;
+            max-width: 368px;
+            border: 1px solid black;
+            padding: 100px;
+        }
+
+        .quote-mark {
+            position: absolute;
+            width: 50px;
+            top: 197px;
+            z-index: -1;
+            left: 70px;
+        }
+
+        .byline {
+            text-align: right;
+        }
+
+        #author-name {
+            text-align: right;
+        }
+
+        #section, #date, .byline {
+            color: #9F8144;
+        }
+
+        .head {
+            font-size: 1.1rem;
+        }
+
+        #content {
+            font-size: 1.1em;
+            line-height: 2;
+        }
+
+        .output img.dark {
+            display: none;
+        }
+
+        .output.dark img.dark {
+            display: block;
+        }
+
+        .output.dark img.bright {
+            display: none;
+        }
+
+        .output.dark {
+            background: #444;
+        }
+
+        .output.dark #content {
+            color: white;
+        }
+
+        .output.dark #today {
+            color: white;
+        }
+
+        .screenshot-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .qrcode {
+            position: absolute;
+            width: 73px;
+            bottom: 77px;
+            left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <span>主題</span>
+        <input class="section-input" value="跨界">
+    </div>
+    <div>
+        <span>日期</span>
+        <input class="date-input" value="2019.04.26">
+    </div>
+    <div>
+        <span>引文</span>
+        <textarea class="content-input">
+            透过极小的团队合作，以我作为一个个体记者的视角，用重现场、长特写的方法来写故事，并且能隐约指向更大的讨论，依然是我能找到的、我最有动力继续下去的“媒介”。我自己，去画一个没有疆域、或是跨越了疆域的世界。
+        </textarea>
+    </div>
+    <div>
+        <span>作者</span>
+        <input class="author-name-input" value="甯卉">
+    </div>
+    <div>
+        <span>標題</span>
+        <input class="title-input" value="跨境记者第六年，一个人的国际新闻地图">
+    </div>
+    <div>
+        <button class="change-background">换底</button>
+        <button class="screenshot">截圖</button>
+    </div>
+
+
+
+    <div class="output">
+        <img class="matters-logo bright" src="./assets/matters-logo.png">
+        <img class="matters-logo dark" src="./assets/matters-logo-dark.png">
+        <div>
+            <div class="head">
+                <span id="today">今日</span>
+                <span id="section"></span>
+                <span id="date"></span>
+            </div>
+            <p id="content"></p>
+            <img class="quote-mark" src="./assets/quote-mark.png">
+            <div class="byline">
+                <div id="author-name"></div>
+                <div id="title"></div>
+            </div>
+            <img class="qrcode" src="./assets/qrcode.png">
+        </div>
+    </div>
+
+    <div class="screenshot-container" style="display: none">
+        <div style="background: white; padding: 10px">
+            請右鍵點擊圖片選擇保存。
+        </div>
+    </div>
+
+<script src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+<script>
+    function render() {
+        for (const s of ["section", "date", "content", "author-name", "title"]) {
+            console.info(s);
+            document.querySelector(`#${s}`).innerHTML = document.querySelector(`.${s}-input`).value;
+        }
+    }
+    render();
+
+    document.querySelector(".section-input").addEventListener("input", event => {
+        document.querySelector("#section").innerHTML = event.target.value;
+    });
+
+    document.querySelector(".date-input").addEventListener("input", event => {
+        document.querySelector("#date").innerHTML = event.target.value;
+    });
+
+    document.querySelector(".content-input").addEventListener("input", event => {
+        document.querySelector("#content").innerHTML = event.target.value;
+    });
+
+    document.querySelector(".author-name-input").addEventListener("input", event => {
+        document.querySelector("#author-name").innerHTML = event.target.value;
+    });
+
+    document.querySelector(".title-input").addEventListener("input", event => {
+        document.querySelector("#title").innerHTML = event.target.value;
+    });
+
+    document.querySelector(".change-background").addEventListener("click", event => {
+        if (document.querySelector(".output").classList.contains("dark")) {
+            document.querySelector(".output").classList.remove("dark");
+        }
+        else {
+            document.querySelector(".output").classList.add("dark");
+        }
+    });
+
+    document.querySelector(".screenshot").addEventListener("click", async event => {
+        html2canvas(document.querySelector(".output")).then(canvas => {
+            document.querySelector(".screenshot-container").appendChild(canvas)
+            document.querySelector(".screenshot-container").style.display = "block"
+        });
+    });
+
+
+
+</script>
+</body>
+</html>
