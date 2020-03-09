@@ -192,7 +192,7 @@
 
     document.querySelector(".screenshot").addEventListener("click", async event => {
         html2canvas(document.querySelector(".output")).then(canvas => {
-            const image = canvas.toDataURL("image/png", 1.0).replace("image/png", "image/octet-stream");
+            const image = canvas.toDataURL("image/png", 1.0);
             const link = document.createElement('a');
             link.download = "my-image.png";
             link.href = image;
