@@ -127,6 +127,10 @@
     <div>
         <button class="change-background">换底</button>
         <div>
+            <span>QRCode</span>
+            <input class="qrcode-check" type="checkbox" checked="checked">
+        </div>
+        <div>
             <a href="#" class="screenshot">下載截圖</a>
         </div>
     </div>
@@ -189,6 +193,17 @@
             document.querySelector(".output").classList.add("dark");
         }
     });
+
+    document.querySelector(".qrcode-check").addEventListener("change", event => {
+        if (event.target.checked) {
+            document.querySelector(".qrcode").style.display = "block";
+        }
+        else {
+            document.querySelector(".qrcode").style.display = "none";
+        }
+
+    });
+
 
     document.querySelector(".screenshot").addEventListener("click", async event => {
         html2canvas(document.querySelector(".output")).then(canvas => {
