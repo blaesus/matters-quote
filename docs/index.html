@@ -84,20 +84,19 @@
             color: white;
         }
 
-        .screenshot-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-        }
-
         .qrcode {
             position: absolute;
             width: 73px;
             bottom: 77px;
             left: 8px;
+        }
+
+        .qrcode-default-image {
+            width: 100%;
+        }
+
+        .qrcode-generated {
+            padding: 2px;
         }
 
         .screenshot {
@@ -132,8 +131,10 @@
     <div>
         <button class="change-background">换底</button>
         <div>
-            <span>QRCode</span>
             <input class="qrcode-check" type="checkbox" checked="checked">
+            <span>QRCode</span>
+            <input class="qrcode-custom" type="text" placeholder="自定義QRCode">
+            <button class="qrcode-switch">替換</button>
         </div>
         <div>
             <a href="#" class="screenshot">下載截圖</a>
@@ -155,16 +156,20 @@
                 <div id="author-name"></div>
                 <div id="title"></div>
             </div>
-            <img class="qrcode" src="./assets/qrcode.png">
+
+            <div class="qrcode">
+                <img class="qrcode-default-image" src="./assets/qrcode.png">
+                <div class="qrcode-generated" style="display: none;"></div>
+            </div>
         </div>
     </div>
 
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="./vendor/html2canvas.min.js"></script>
+<script src="./vendor/qrcode.min.js"></script>
 
 <script>
     function render() {
         for (const s of ["section", "date", "content", "author-name", "title"]) {
-            console.info(s);
             document.querySelector(`#${s}`).innerHTML = document.querySelector(`.${s}-input`).value;
         }
     }
@@ -209,7 +214,6 @@
 
     });
 
-
     document.querySelector(".screenshot").addEventListener("click", async event => {
         html2canvas(document.querySelector(".output")).then(canvas => {
             const image = canvas.toDataURL("image/png", 1.0);
@@ -221,7 +225,32 @@
     });
 
 
-
+    let qrcodeInstance = null;
+    document.querySelector(".qrcode-switch").addEventListener("click", () => {
+        const url = document.querySelector(".qrcode-custom").value;
+        if (!qrcodeInstance) {
+            try {
+                qrcodeInstance = new QRCode(document.querySelector(".qrcode-generated"), {
+                    text: url,
+                    width: document.querySelector(".qrcode").getBoundingClientRect().width - 4,
+                    height: document.querySelector(".qrcode").getBoundingClientRect().height - 4,
+                    colorDark : "#000000",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+                document.querySelector(".qrcode-generated").style.display = "block";
+                document.querySelector(".qrcode-default-image").style.display = "none";
+            }
+            catch (error) {
+                alert("URL太長了，QRCode放不下");
+                document.querySelector(".qrcode-generated").style.display = "none";
+                document.querySelector(".qrcode-default-image").style.display = "block";
+            }
+        }
+        else {
+            qrcodeInstance.makeCode(url)
+        }
+    })
 </script>
 </body>
 </html>
