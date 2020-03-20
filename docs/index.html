@@ -57,6 +57,7 @@
 
         #content {
             font-size: 1.1em;
+            font-family: serif;
             line-height: 2;
         }
 
@@ -116,9 +117,30 @@
     </div>
     <div>
         <span>引文</span>
-        <textarea class="content-input">
-            透过极小的团队合作，以我作为一个个体记者的视角，用重现场、长特写的方法来写故事，并且能隐约指向更大的讨论，依然是我能找到的、我最有动力继续下去的“媒介”。我自己，去画一个没有疆域、或是跨越了疆域的世界。
-        </textarea>
+        <textarea class="content-input">透过极小的团队合作，以我作为一个个体记者的视角，用重现场、长特写的方法来写故事，并且能隐约指向更大的讨论，依然是我能找到的、我最有动力继续下去的“媒介”。我自己，去画一个没有疆域、或是跨越了疆域的世界。 </textarea>
+        <div>
+            引文字體
+            <span class="content-ff-chooser">
+                <input type="radio" id="content-ff-system-serif" name="content-ff" value="system-serif" checked="checked">
+                <label for="content-ff-system-serif">系統襯線體</label>
+
+                <input type="radio" id="content-ff-ming" name="content-ff" value="ming">
+                <label for="content-ff-ming">明體</label>
+
+                <input type="radio" id="content-ff-hei" name="content-ff" value="hei">
+                <label for="content-ff-hei">黑體</label>
+
+                <input type="radio" id="content-ff-sans-kai" name="content-ff" value="kai">
+                <label for="content-ff-sans-kai">楷體</label>
+
+                <input type="radio" id="content-ff-sans-fangsong" name="content-ff" value="fangsong">
+                <label for="content-ff-sans-fangsong">仿宋</label>
+
+                <input type="radio" id="content-ff-custom" name="content-ff" value="custom">
+                <label for="content-ff-custom">自定義</label>
+                <input class="content-ff-custom-input" disabled="disabled" value="STFangsong" />
+            </span>
+        </div>
     </div>
     <div>
         <span>作者</span>
@@ -211,7 +233,6 @@
         else {
             document.querySelector(".qrcode").style.display = "none";
         }
-
     });
 
     document.querySelector(".screenshot").addEventListener("click", async event => {
@@ -251,6 +272,55 @@
             qrcodeInstance.makeCode(url)
         }
     })
+
+    document.querySelector(".content-ff-chooser").addEventListener("click", event => {
+        event.stopPropagation();
+        switch (event.target.value) {
+            case "system-serif": {
+                document.querySelector(".content-ff-custom-input").setAttribute("disabled", "disabled");
+                document.querySelector("#content").style.fontFamily = "serif";
+                break;
+            }
+            case "ming": {
+                document.querySelector(".content-ff-custom-input").setAttribute("disabled", "disabled");
+                document.querySelector("#content").style.fontFamily =
+                    "'STSongti-TC-Light', NSimSun, PMingLiU, serif";
+                break;
+            }
+
+            case "hei": {
+                document.querySelector(".content-ff-custom-input").setAttribute("disabled", "disabled");
+                document.querySelector("#content").style.fontFamily =
+                    "'Hiragino Sans GB', 'Microsoft YaHei', STXihei, sans-serif";
+                break;
+            }
+            case "kai": {
+                document.querySelector(".content-ff-custom-input").setAttribute("disabled", "disabled");
+                document.querySelector("#content").style.fontFamily =
+                    "STKaiti, BiauKai, DFKai-SB, KaiTi, serif";
+                break;
+            }
+            case "fangsong": {
+                document.querySelector(".content-ff-custom-input").setAttribute("disabled", "disabled");
+                document.querySelector("#content").style.fontFamily =
+                    "STFangSong, FangSong_GB2312, FangSong, serif";
+                break;
+            }
+            case "custom": {
+                document.querySelector(".content-ff-custom-input").removeAttribute("disabled");
+                document.querySelector("#content").style.fontFamily = document.querySelector(".content-ff-custom-input").value;
+                break;
+            }
+            default: {
+                document.querySelector("#content").style.fontFamily = "serif";
+            }
+        }
+    });
+
+    document.querySelector(".content-ff-custom-input").addEventListener("input", event => {
+        document.querySelector("#content").style.fontFamily = event.target.value;
+    })
+
 </script>
 </body>
 </html>
