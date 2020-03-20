@@ -56,7 +56,7 @@
         }
 
         #content {
-            font-size: 1.1em;
+            font-size: 18px;
             font-family: serif;
             line-height: 2;
         }
@@ -141,6 +141,16 @@
                 <input class="content-ff-custom-input" disabled="disabled" value="STFangsong" />
             </span>
         </div>
+        <div>
+            引文文字大小
+            <span class="content-fs-chooser">
+                <label>
+                    <input class="content-fs-auto-switch" type="checkbox" checked="checked" />
+                    自動縮放
+                </label>
+                <input class="content-fs-input" type="number" value="18" />px
+            </span>
+        </div>
     </div>
     <div>
         <span>作者</span>
@@ -207,6 +217,11 @@
 
     document.querySelector(".content-input").addEventListener("input", event => {
         document.querySelector("#content").innerHTML = event.target.value;
+
+        if (document.querySelector(".content-fs-auto-switch").checked) {
+
+            autoSetContentSize();
+        }
     });
 
     document.querySelector(".author-name-input").addEventListener("input", event => {
@@ -319,6 +334,29 @@
 
     document.querySelector(".content-ff-custom-input").addEventListener("input", event => {
         document.querySelector("#content").style.fontFamily = event.target.value;
+    });
+
+    document.querySelector(".content-fs-input").addEventListener("input", event => {
+        const size = Number(event.target.value) || 18;
+        document.querySelector("#content").style.fontSize = `${size}px`;
+        document.querySelector(".content-fs-auto-switch").checked = false;
+    });
+
+    function autoSetContentSize() {
+        const target = document.querySelector("#content");
+        const text = target.innerText;
+
+        const size = Math.round(62 + -9.6 * Math.log(text.length));
+        target.style.fontSize = `${size}px`;
+        document.querySelector(".content-fs-input").value = size;
+    }
+
+    autoSetContentSize();
+
+    document.querySelector(".content-fs-auto-switch").addEventListener("click", event => {
+        if (event.target.checked) {
+            autoSetContentSize();
+        }
     })
 
 </script>
