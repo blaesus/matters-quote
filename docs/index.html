@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <style>
         body {
             font-family: sans-serif;
@@ -250,8 +251,8 @@
         }
     });
 
-    document.querySelector(".screenshot").addEventListener("click", async event => {
-        html2canvas(document.querySelector(".output")).then(canvas => {
+    document.querySelector(".screenshot").addEventListener("click", event => {
+        html2canvas(document.querySelector(".output"), {scale: 4}).then(canvas => {
             const image = canvas.toDataURL("image/png", 1.0);
             const link = document.createElement('a');
             link.download = `${document.querySelector(".title-input").value}.png`;
