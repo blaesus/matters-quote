@@ -162,33 +162,27 @@
         <span>引文字體</span>
         <span class="content-ff-chooser">
                 <label>
-                    <input type="radio" name="content-ff" value="system-serif" checked="checked" />
-                    系統襯線體
+                    <input type="radio" name="content-ff" value="system-serif" checked="checked" />系統襯線體
                 </label>
 
                 <label>
-                    <input type="radio" name="content-ff" value="ming"/>
-                    明體
+                    <input type="radio" name="content-ff" value="ming"/>明體
                 </label>
 
                 <label>
-                    <input type="radio" name="content-ff" value="hei">
-                    黑體
+                    <input type="radio" name="content-ff" value="hei">黑體
                 </label>
 
                 <label>
-                    <input type="radio" name="content-ff" value="kai">
-                    楷體
+                    <input type="radio" name="content-ff" value="kai">楷體
                 </label>
 
                 <label>
-                    <input type="radio" name="content-ff" value="fangsong">
-                    仿宋
+                    <input type="radio" name="content-ff" value="fangsong">仿宋
                 </label>
 
                 <label>
-                    <input type="radio" name="content-ff" value="custom">
-                    自定義
+                    <input type="radio" name="content-ff" value="custom">自定義
                 </label>
                 <input class="content-ff-custom-input" disabled="disabled" value="STFangsong" />
         </span>
@@ -215,13 +209,11 @@
         <span>色調</span>
         <span class="palette-chooser">
             <label>
-                <input type="radio" name="palette" value="bright" checked="checked">
-                日
+                <input type="radio" name="palette" value="bright" checked="checked">日
             </label>
 
             <label>
-                <input type="radio" name="palette" value="dark">
-                夜
+                <input type="radio" name="palette" value="dark">夜
             </label>
         </span>
     </div>
@@ -317,7 +309,6 @@
     });
 
     document.querySelectorAll(".screenshot").forEach(node => node.addEventListener("click", event => {
-        console.info(event)
         const scaleKilo = Number.parseInt(event.target.getAttribute("data-resolution"), 10) || 2;
         const scale = Math.round(scaleKilo * 2);
         html2canvas(document.querySelector(".output"), {scale}).then(canvas => {
