@@ -139,13 +139,18 @@
         }
 
         .description {
-            margin-right: 1rem;
+            margin-right: 0.5rem;
             font-weight: bold;
+        }
+
+        .description:not(:first-of-type) {
+            margin-left: 1rem;
         }
 
         .customization-options {
             max-height: 0;
             overflow: hidden;
+            transition: max-height 0.5s ease-in;
         }
 
         .customization-switch {
@@ -154,8 +159,17 @@
         }
 
         .customizing .customization-options {
-            max-height: 2000px;
+            max-height: 200px;
+        }
 
+        .customization-marker {
+            display: inline-block;
+            transform: rotate(0);
+            transition: transform 0.2s ease-in;
+        }
+
+        .customizing .customization-marker {
+            transform: rotate(90deg);
         }
 
     </style>
@@ -179,7 +193,7 @@
     </div>
     <div class="customization-panel">
         <div class="customization-switch">
-            <span>▶</span> 微調
+            <span class="customization-marker">▶</span>微調
         </div>
         <div class="customization-options">
             <div class="entry">
