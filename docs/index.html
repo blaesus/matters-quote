@@ -162,7 +162,7 @@
                 <input type="radio" id="content-ff-custom" name="content-ff" value="custom">
                 <label for="content-ff-custom">自定義</label>
                 <input class="content-ff-custom-input" disabled="disabled" value="STFangsong" />
-            </span>
+        </span>
     </div>
     <div class="entry">
         <span>引文文字大小</span>
@@ -192,6 +192,31 @@
             <input class="qrcode-custom" type="text" placeholder="自定義QRCode">
             <button class="qrcode-switch">替換</button>
         </div>
+    </div>
+    <div class="entry">
+        <span>清晰度</span>
+        <span class="output-resolution-chooser">
+            <label>
+                <input type="radio" name="output-resolution" value="1">
+                1K
+            </label>
+
+            <label>
+                <input type="radio" name="output-resolution" value="2" checked="checked">
+                2K
+            </label>
+
+            <label>
+                <input type="radio" name="output-resolution" value="4">
+                4K
+            </label>
+
+            <label>
+                <input type="radio" name="output-resolution" value="8">
+                8K
+            </label>
+        </span>
+
     </div>
     <div class="entry">
         <a href="#" class="screenshot">下載截圖</a>
@@ -275,7 +300,9 @@
     });
 
     document.querySelector(".screenshot").addEventListener("click", event => {
-        html2canvas(document.querySelector(".output"), {scale: 4}).then(canvas => {
+        const scaleKilo = Number.parseInt(document.querySelector(".output-resolution-chooser input:checked").value);
+        const scale = Math.round(scaleKilo * 2 || 2);
+        html2canvas(document.querySelector(".output"), {scale}).then(canvas => {
             const image = canvas.toDataURL("image/png", 1.0);
             const link = document.createElement('a');
             link.download = `${document.querySelector(".title-input").value}.png`;
