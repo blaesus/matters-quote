@@ -138,29 +138,53 @@
             background: #eee;
         }
 
-        .entry > :first-child {
+        .description {
             margin-right: 1rem;
             font-weight: bold;
+        }
+
+        .customization-options {
+            max-height: 0;
+            overflow: hidden;
+        }
+
+        .customization-switch {
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .customizing .customization-options {
+            max-height: 2000px;
+
         }
 
     </style>
 </head>
 <body>
     <div class="entry">
-        <span>主題</span>
+        <span class="description">主題</span>
         <input class="section-input" value="跨界">
-    </div>
-    <div class="entry">
-        <span>日期</span>
+        <span class="description">日期</span>
         <input class="date-input" value="2019.04.26">
     </div>
     <div class="entry">
-        <span>引文</span>
+        <span class="description">引文</span>
         <textarea class="content-input">透过极小的团队合作，以我作为一个个体记者的视角，用重现场、长特写的方法来写故事，并且能隐约指向更大的讨论，依然是我能找到的、我最有动力继续下去的“媒介”。我自己，去画一个没有疆域、或是跨越了疆域的世界。 </textarea>
     </div>
     <div class="entry">
-        <span>引文字體</span>
-        <span class="content-ff-chooser">
+        <span class="description">作者</span>
+        <input class="author-name-input" value="甯卉">
+        <span class="description">標題</span>
+        <input class="title-input" value="跨境记者第六年，一个人的国际新闻地图">
+    </div>
+    <div class="customization-panel">
+        <div class="customization-switch">
+            <span>▶</span> 微調
+        </div>
+        <div class="customization-options">
+            <div class="entry">
+                <span class="description">引文字體</span>
+                <span class="content-ff-chooser">
                 <label>
                     <input type="radio" name="content-ff" value="system-serif" checked="checked" />系統襯線體
                 </label>
@@ -186,28 +210,20 @@
                 </label>
                 <input class="content-ff-custom-input" disabled="disabled" value="STFangsong" />
         </span>
-    </div>
-    <div class="entry">
-        <span>引文文字大小</span>
-        <span class="content-fs-chooser">
+            </div>
+            <div class="entry">
+                <span class="description">引文文字大小</span>
+                <span class="content-fs-chooser">
                 <label>
                     <input class="content-fs-auto-switch" type="checkbox" checked="checked" />
                     自動縮放
                 </label>
                 <input class="content-fs-input" type="number" value="18" />px
         </span>
-    </div>
-    <div class="entry">
-        <span>作者</span>
-        <input class="author-name-input" value="甯卉">
-    </div>
-    <div class="entry">
-        <span>標題</span>
-        <input class="title-input" value="跨境记者第六年，一个人的国际新闻地图">
-    </div>
-    <div class="entry">
-        <span>色調</span>
-        <span class="palette-chooser">
+            </div>
+            <div class="entry">
+                <span class="description">色調</span>
+                <span class="palette-chooser">
             <label>
                 <input type="radio" name="palette" value="bright" checked="checked">日
             </label>
@@ -216,13 +232,15 @@
                 <input type="radio" name="palette" value="dark">夜
             </label>
         </span>
-    </div>
-    <div class="entry">
-        <div>
-            <input class="qrcode-check" type="checkbox" checked="checked">
-            <span>QRCode</span>
-            <input class="qrcode-custom" type="text" placeholder="自定義QRCode">
-            <button class="qrcode-switch">替換</button>
+            </div>
+            <div class="entry">
+                <div>
+                    <input class="qrcode-check" type="checkbox" checked="checked">
+                    <span>QRCode</span>
+                    <input class="qrcode-custom" type="text" placeholder="自定義QRCode">
+                    <button class="qrcode-switch">替換</button>
+                </div>
+            </div>
         </div>
     </div>
     <div class="entry">
@@ -257,6 +275,45 @@
 <script src="./vendor/qrcode.min.js"></script>
 
 <script>
+    const fontFamilyKey = "ff";
+    const fontFamilyCustomKey = "ff-custom";
+
+    function saveSettings() {
+        const activatedFontFamily = document.querySelector(".content-ff-chooser input:checked").value;
+        const customFontFamily = document.querySelector(".content-ff-custom-input").value;
+        localStorage.setItem(fontFamilyKey, activatedFontFamily);
+        localStorage.setItem(fontFamilyCustomKey, customFontFamily);
+    }
+
+    function loadSettings() {
+        const savedFontFamily = localStorage.getItem(fontFamilyKey);
+        if (savedFontFamily) {
+            document.querySelectorAll(".content-ff-chooser input").forEach(node => {
+                node.checked = node.value === savedFontFamily;
+            })
+            if (savedFontFamily === "custom") {
+                document.querySelector(".content-ff-custom-input").removeAttribute("disabled");
+            }
+        }
+        const savedCustomFontFamily = localStorage.getItem(fontFamilyCustomKey);
+        if (savedCustomFontFamily) {
+            document.querySelector(".content-ff-custom-input").value = savedCustomFontFamily;
+        }
+    }
+
+    function trySilently(f) {
+        return function() {
+            try {
+                f()
+            } catch (error) { }
+        }
+    }
+
+    const trySaveSettings = trySilently(saveSettings);
+    const tryLoadSettings = trySilently(loadSettings);
+
+    tryLoadSettings();
+
     function render() {
         for (const s of ["section", "date", "content", "author-name", "title"]) {
             document.querySelector(`#${s}`).innerHTML = document.querySelector(`.${s}-input`).value;
@@ -350,6 +407,7 @@
 
     document.querySelector(".content-ff-chooser").addEventListener("click", event => {
         event.stopPropagation();
+        trySaveSettings();
         switch (event.target.value) {
             case "system-serif": {
                 document.querySelector(".content-ff-custom-input").setAttribute("disabled", "disabled");
@@ -394,6 +452,7 @@
 
     document.querySelector(".content-ff-custom-input").addEventListener("input", event => {
         document.querySelector("#content").style.fontFamily = event.target.value;
+        trySaveSettings();
     });
 
     document.querySelector(".content-fs-input").addEventListener("input", event => {
@@ -418,6 +477,11 @@
             autoSetContentSize();
         }
     })
+
+    document.querySelector(".customization-switch").addEventListener("click", event => {
+        document.querySelector('.customization-panel').classList.toggle("customizing");
+    })
+
 
 </script>
 </body>
