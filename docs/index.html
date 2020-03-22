@@ -107,12 +107,19 @@
         .screenshot {
             display: inline-block;
             margin: 10px 0;
+            text-decoration: underline;
+            cursor: pointer;
+            color: #00A;
+        }
+
+        .screenshot:first-of-type {
             font-size: 1.5rem;
         }
 
         .entry {
             display: flex;
             flex-direction: row;
+            align-items: baseline;
             margin: 0.5rem 0;
             width: 100%;
         }
@@ -135,6 +142,7 @@
             margin-right: 1rem;
             font-weight: bold;
         }
+
     </style>
 </head>
 <body>
@@ -207,7 +215,7 @@
         <span>色調</span>
         <span class="palette-chooser">
             <label>
-                <input type="radio" name="palette" value="light" checked="checked">
+                <input type="radio" name="palette" value="bright" checked="checked">
                 日
             </label>
 
@@ -226,32 +234,8 @@
         </div>
     </div>
     <div class="entry">
-        <span>清晰度</span>
-        <span class="output-resolution-chooser">
-            <label>
-                <input type="radio" name="output-resolution" value="1">
-                1K
-            </label>
-
-            <label>
-                <input type="radio" name="output-resolution" value="2" checked="checked">
-                2K
-            </label>
-
-            <label>
-                <input type="radio" name="output-resolution" value="4">
-                4K
-            </label>
-
-            <label>
-                <input type="radio" name="output-resolution" value="8">
-                8K
-            </label>
-        </span>
-
-    </div>
-    <div class="entry">
-        <a href="#" class="screenshot">下載截圖</a>
+        <a class="screenshot" data-resolution="2K">下載截圖</a>
+        <a class="screenshot" data-resolution="8K">(8K高清版)</a>
     </div>
 
     <div class="output">
@@ -315,7 +299,7 @@
 
     document.querySelector(".palette-chooser").addEventListener("click", event => {
         event.stopPropagation();
-        if (event.target.value === "light") {
+        if (event.target.value === "bright") {
             document.querySelector(".output").classList.remove("dark");
         }
         else {
@@ -332,9 +316,10 @@
         }
     });
 
-    document.querySelector(".screenshot").addEventListener("click", event => {
-        const scaleKilo = Number.parseInt(document.querySelector(".output-resolution-chooser input:checked").value);
-        const scale = Math.round(scaleKilo * 2 || 2);
+    document.querySelectorAll(".screenshot").forEach(node => node.addEventListener("click", event => {
+        console.info(event)
+        const scaleKilo = Number.parseInt(event.target.getAttribute("data-resolution"), 10) || 2;
+        const scale = Math.round(scaleKilo * 2);
         html2canvas(document.querySelector(".output"), {scale}).then(canvas => {
             const image = canvas.toDataURL("image/png", 1.0);
             const link = document.createElement('a');
@@ -342,7 +327,7 @@
             link.href = image;
             link.click();
         });
-    });
+    }));
 
 
     let qrcodeInstance = null;
