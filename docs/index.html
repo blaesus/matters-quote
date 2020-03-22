@@ -120,6 +120,15 @@
         .entry input, .entry textarea {
             font-size: 0.9rem;
             flex: 1;
+            border: 1px solid #ccc;
+        }
+
+        input:hover, textarea:hover {
+            border: 1px solid black;
+        }
+
+        label:hover {
+            background: #eee;
         }
 
         .entry > :first-child {
@@ -144,23 +153,35 @@
     <div class="entry">
         <span>引文字體</span>
         <span class="content-ff-chooser">
-                <input type="radio" id="content-ff-system-serif" name="content-ff" value="system-serif" checked="checked">
-                <label for="content-ff-system-serif">系統襯線體</label>
+                <label>
+                    <input type="radio" name="content-ff" value="system-serif" checked="checked" />
+                    系統襯線體
+                </label>
 
-                <input type="radio" id="content-ff-ming" name="content-ff" value="ming">
-                <label for="content-ff-ming">明體</label>
+                <label>
+                    <input type="radio" name="content-ff" value="ming"/>
+                    明體
+                </label>
 
-                <input type="radio" id="content-ff-hei" name="content-ff" value="hei">
-                <label for="content-ff-hei">黑體</label>
+                <label>
+                    <input type="radio" name="content-ff" value="hei">
+                    黑體
+                </label>
 
-                <input type="radio" id="content-ff-sans-kai" name="content-ff" value="kai">
-                <label for="content-ff-sans-kai">楷體</label>
+                <label>
+                    <input type="radio" name="content-ff" value="kai">
+                    楷體
+                </label>
 
-                <input type="radio" id="content-ff-sans-fangsong" name="content-ff" value="fangsong">
-                <label for="content-ff-sans-fangsong">仿宋</label>
+                <label>
+                    <input type="radio" name="content-ff" value="fangsong">
+                    仿宋
+                </label>
 
-                <input type="radio" id="content-ff-custom" name="content-ff" value="custom">
-                <label for="content-ff-custom">自定義</label>
+                <label>
+                    <input type="radio" name="content-ff" value="custom">
+                    自定義
+                </label>
                 <input class="content-ff-custom-input" disabled="disabled" value="STFangsong" />
         </span>
     </div>
@@ -183,7 +204,18 @@
         <input class="title-input" value="跨境记者第六年，一个人的国际新闻地图">
     </div>
     <div class="entry">
-        <button class="change-background">换底</button>
+        <span>色調</span>
+        <span class="palette-chooser">
+            <label>
+                <input type="radio" name="palette" value="light" checked="checked">
+                日
+            </label>
+
+            <label>
+                <input type="radio" name="palette" value="dark">
+                夜
+            </label>
+        </span>
     </div>
     <div class="entry">
         <div>
@@ -281,8 +313,9 @@
         document.querySelector("#title").innerHTML = event.target.value;
     });
 
-    document.querySelector(".change-background").addEventListener("click", event => {
-        if (document.querySelector(".output").classList.contains("dark")) {
+    document.querySelector(".palette-chooser").addEventListener("click", event => {
+        event.stopPropagation();
+        if (event.target.value === "light") {
             document.querySelector(".output").classList.remove("dark");
         }
         else {
